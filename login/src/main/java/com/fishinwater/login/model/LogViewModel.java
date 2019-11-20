@@ -4,7 +4,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.fishinwater.login.fragment.IOnResultListener;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.io.File;
+import java.util.Map;
 
 import okhttp3.Call;
 
@@ -16,55 +20,50 @@ public class LogViewModel extends ViewModel implements IBaseLog {
 
     private final String TAG = "LogViewModel";
 
-    private final String LOG_IN_URL = "http://192.168.0.103/SitUp/LoginServlet";
-
     @Override
-    public void login(String userAccount, String mPassword, final IOnResultListener logResultListener) {
-        OkHttpUtils
+    public void login(String url, Map<String, String> params, final IOnResultListener logResultListener) {
+        PostFormBuilder builder = OkHttpUtils
                 .post()
-                .url(LOG_IN_URL)
-                .addParams("username", userAccount)
-                .addParams("password", mPassword)
-                .build()
-                .execute( new StringCallback(){
+                .url(url);
+                for (String paramName : params.keySet()) {
+                        builder.addParams(paramName, params.get(paramName));
+                }
+        builder.build()
+            .execute( new StringCallback(){
 
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        logResultListener.onFailed(e);
-                    }
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    logResultListener.onFailed(e);
+                }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        logResultListener.onSucceed(response);
-                    }
-                });
+                @Override
+                public void onResponse(String response, int id) {
+                    logResultListener.onSucceed(response);
+                }
+            });
     }
 
     @Override
-    public void resist(String userAccount, String mPassword, final IOnResultListener logResultListener) {
-        OkHttpUtils
+    public void resist(String url, Map<String, String> params, final IOnResultListener logResultListener) {
+        PostFormBuilder builder = OkHttpUtils
                 .post()
-                .url(LOG_IN_URL)
-                .addParams("username", userAccount)
-                .addParams("password", mPassword)
-                .build()
-                .execute( new StringCallback(){
+                .url(url);
+        for (String paramName : params.keySet()) {
+            builder.addParams(paramName, params.get(paramName));
+        }
+        builder.build()
+            .execute( new StringCallback(){
 
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
+                @Override
+                public void onError(Call call, Exception e, int id) {
 
-                    }
+                }
 
-                    @Override
-                    public void onResponse(String response, int id) {
-                        logResultListener.onSucceed(response);
-                    }
-                });
-    }
-
-    @Override
-    public void logout(IOnResultListener logResultListener) {
-
+                @Override
+                public void onResponse(String response, int id) {
+                    logResultListener.onSucceed(response);
+                }
+            });
     }
 
 }

@@ -1,5 +1,7 @@
 package com.fishinwater.login.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +17,17 @@ import com.fishinwater.login.R;
 import com.fishinwater.login.model.LogViewModel;
 import com.fishinwater.login.presenter.IBasePresenter;
 import com.fishinwater.login.presenter.LogPresenter;
+import com.fishinwater.login.view.IBaseLogActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author fishinwater-1999
  */
 public class LoginFragment extends BaseFragment implements IOnResultListener {
 
-    private static final String TAG = "LoginFragment";
+    private IBaseLogActivity mContext;
 
     EditText mAccountEdit;
 
@@ -40,7 +46,20 @@ public class LoginFragment extends BaseFragment implements IOnResultListener {
     private void iniView(View view) {
         mAccountEdit = view.findViewById(R.id.user_account);
         mPasswordEdit = view.findViewById(R.id.user_password);
+        view.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+        view.findViewById(R.id.resist).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.replaceFragment(new ResistFragment());
+            }
+        });
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -50,8 +69,11 @@ public class LoginFragment extends BaseFragment implements IOnResultListener {
         }
     }
 
-    public void login(View v) {
-        getPresenter().login(mAccountEdit.getText().toString(), mPasswordEdit.getText().toString(), this);
+    public void login() {
+        //getPresenter().login(mContext.getLoginUrl() ,mContext.getParams() , this);
+        Log.d(TAG, mContext.getLoginUrl());
+        Log.d(TAG, mContext.getResistUrl());
+        //mPasswordEdit.setText(mContext.getResistUrl());
     }
 
     @Override
@@ -95,4 +117,13 @@ public class LoginFragment extends BaseFragment implements IOnResultListener {
         super.onDestroy();
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof IBaseLogActivity) {
+            Log.d(TAG, "onAttach - 1");
+            mContext = (IBaseLogActivity) context;
+        }
+        Log.d(TAG, "onAttach - 2");
+    }
 }

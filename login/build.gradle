@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 29
@@ -14,6 +13,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        // ARouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -44,9 +50,4 @@ dependencies {
     implementation 'com.zhy:okhttputils:2.6.2'
 }
 
-publish {
-    userOrg = 'fishinwater'//username 或者 organization 的名称，个人用户是 username，企业用户是 Organization Name
-    groupId = 'com.fishinwater.loginmodule'//jcenter上的路径，如com.ezbuy.XXX
-    artifactId = 'login-module'//项目名称与bintray上的package名称一致
-    publishVersion = 'v1.0.0'//版本号
-}
+apply from: 'maven-release-aar.gradle'

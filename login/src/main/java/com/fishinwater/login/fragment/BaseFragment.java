@@ -13,6 +13,8 @@ import com.fishinwater.login.presenter.IBasePresenter;
  */
 public abstract class BaseFragment<V extends IOnResultListener, P extends IBasePresenter<V>> extends Fragment {
 
+    public String TAG = getClass().getCanonicalName();
+
     /**
      * View 层
      */

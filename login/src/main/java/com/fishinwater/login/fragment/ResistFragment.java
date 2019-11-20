@@ -1,5 +1,6 @@
 package com.fishinwater.login.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.fishinwater.login.model.IBaseLog;
 import com.fishinwater.login.model.LogViewModel;
 import com.fishinwater.login.presenter.IBasePresenter;
 import com.fishinwater.login.presenter.LogPresenter;
+import com.fishinwater.login.view.IBaseLogActivity;
 
 /**
  * 注册界面
@@ -22,6 +24,8 @@ import com.fishinwater.login.presenter.LogPresenter;
  * @author fishinwater-1999
  */
 public class ResistFragment extends BaseFragment implements IOnResultListener {
+
+    private IBaseLogActivity mContext;
 
     private IBaseLog mViewModel;
 
@@ -40,6 +44,20 @@ public class ResistFragment extends BaseFragment implements IOnResultListener {
     private void iniView(View view) {
         mAccountEdit = view.findViewById(R.id.user_account);
         mPasswordEdit = view.findViewById(R.id.user_password);
+        mAccountEdit = view.findViewById(R.id.user_account);
+        mPasswordEdit = view.findViewById(R.id.user_password);
+        view.findViewById(R.id.resist).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resist();
+            }
+        });
+        view.findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContext.replaceFragment(new LoginFragment());
+            }
+        });
     }
 
     @Override
@@ -84,13 +102,19 @@ public class ResistFragment extends BaseFragment implements IOnResultListener {
         Toast.makeText(getActivity(), "密码错误", Toast.LENGTH_LONG).show();
     }
 
-    public void resist(View v) {
-        getPresenter().resister(mAccountEdit.getText().toString(), mPasswordEdit.getText().toString(), this);
-    }
-
     @Override
     public void onDestroy() {
         onDetach();
         super.onDestroy();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = (IBaseLogActivity) context;
+    }
+
+    private void resist() {
+        getPresenter().resister(mContext.getLoginUrl(), mContext.getParams(), this);
     }
 }

@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".login.fragment.ResistFragment">
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/user_account"
@@ -24,7 +23,6 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:onClick="resist"
         android:text="登录"/>
 
     <Button
